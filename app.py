@@ -1,17 +1,16 @@
 import os
 import nltk
+from flask import Flask, request, jsonify, send_from_directory
+import pandas as pd
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
-# create nltk_data folder safely
+app = Flask(__name__, static_folder="../", static_url_path="")
+
 NLTK_DIR = os.path.join(os.getcwd(), "nltk_data")
 os.makedirs(NLTK_DIR, exist_ok=True)
 
 nltk.data.path.append(NLTK_DIR)
 nltk.download("vader_lexicon", download_dir=NLTK_DIR)
-flask import Flask, jsonify, send_from_directory
-import pandas as pd
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
-
-app = Flask(__name__, static_folder="../", static_url_path="")
 
 sia = SentimentIntensityAnalyzer()
 
