@@ -1,42 +1,30 @@
-# imports
 import os
 import nltk
-from flask import Flask, request, jsonify, send_from_directory
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import pandas as pd
+from flask import Flask, jsonify, send_from_directory
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
-# app init
 app = Flask(__name__, static_folder="./", static_url_path="")
 
-# nltk setup
+# NLTK setup
 NLTK_DIR = os.path.join(os.getcwd(), "nltk_data")
 os.makedirs(NLTK_DIR, exist_ok=True)
 nltk.data.path.append(NLTK_DIR)
 nltk.download("vader_lexicon", download_dir=NLTK_DIR)
 
-# sentiment analyzer
 sia = SentimentIntensityAnalyzer()
 
-# home page
 @app.route("/")
 def home():
     return send_from_directory("./", "index.html")
 
-# analyze api
-@app.route("/analyze", methods=["POST"])
-def analyze():
-    text = request.json["text"]
-    score = sia.polarity_scores(text)["compound"]
-    return jsonify(score)
-
-# data api
 @app.route("/data")
 def data():
     df = pd.read_csv("Amazon_Reviews.csv")
 
-    result = []
+    data = []
     for _, row in df.iterrows():
-        score = sia.polarity_scores(row["Review Title"])["compound"]
+        score = sia.polarity_scores(str(row["Review Title"]))["compound"]
 
         if score > 0.05:
             sentiment = "Positive"
@@ -45,7 +33,7 @@ def data():
         else:
             sentiment = "Neutral"
 
-        result.append({
+        data.append({
             "Country": row["Country"],
             "Reviewer Name": row["Reviewer Name"],
             "Rating": row["Rating"],
@@ -53,8 +41,7 @@ def data():
             "Sentiment": sentiment
         })
 
-    return jsonify(result)
+    return jsonify(data)
 
-# main
 if __name__ == "__main__":
     app.run(debug=True)
