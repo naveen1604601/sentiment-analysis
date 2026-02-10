@@ -17,25 +17,24 @@ nltk.download("vader_lexicon", download_dir=NLTK_DIR)
 # sentiment analyzer
 sia = SentimentIntensityAnalyzer()
 
-# ✅ ADD HERE
+# home page
 @app.route("/")
 def home():
     return send_from_directory("./", "index.html")
 
-# other routes
+# analyze api
 @app.route("/analyze", methods=["POST"])
 def analyze():
     text = request.json["text"]
     score = sia.polarity_scores(text)["compound"]
     return jsonify(score)
 
-# main
-if __name__ == "__main__":
+# data api
 @app.route("/data")
 def data():
     df = pd.read_csv("Amazon_Reviews.csv")
 
-    data = []
+    result = []
     for _, row in df.iterrows():
         score = sia.polarity_scores(row["Review Title"])["compound"]
 
@@ -46,7 +45,7 @@ def data():
         else:
             sentiment = "Neutral"
 
-        data.append({
+        result.append({
             "Country": row["Country"],
             "Reviewer Name": row["Reviewer Name"],
             "Rating": row["Rating"],
@@ -54,5 +53,8 @@ def data():
             "Sentiment": sentiment
         })
 
-    return jsonify(data)
-    app.run() 
+    return jsonify(result)
+
+# main
+if __name__ == "__main__":
+    app.run(debug=True)
