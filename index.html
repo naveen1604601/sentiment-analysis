@@ -1,19 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
   <meta charset="UTF-8">
-  <title>Amazon Reviews – Sentiment Analysis</title>
-
-  <!-- CSS -->
+  <title>Amazon Reviews Dashboard</title>
   <link rel="stylesheet" href="style.css">
-
-  <!-- Chart.js (MUST be before script.js) -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 
 <body>
-
   <h2>Amazon Reviews</h2>
 
   <input type="text" id="search" placeholder="Search reviews..." />
@@ -31,11 +25,9 @@
     <tbody></tbody>
   </table>
 
-  <div>
-    <button id="prev">Prev</button>
-    <span id="pageInfo"></span>
-    <button id="next">Next</button>
-  </div>
+  <button id="prev">Prev</button>
+  <span id="pageInfo"></span>
+  <button id="next">Next</button>
 
   <h3>Rating Analysis</h3>
   <canvas id="ratingChart"></canvas>
@@ -46,9 +38,11 @@
   <h3>Sentiment Analysis</h3>
   <canvas id="sentimentChart"></canvas>
 
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
   <!-- Your JS -->
   <script src="script.js"></script>
-
 </body>
 
 </html>
