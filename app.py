@@ -31,4 +31,28 @@ def analyze():
 
 # main
 if __name__ == "__main__":
+@app.route("/data")
+def data():
+    df = pd.read_csv("Amazon_Reviews.csv")
+
+    data = []
+    for _, row in df.iterrows():
+        score = sia.polarity_scores(row["Review Title"])["compound"]
+
+        if score > 0.05:
+            sentiment = "Positive"
+        elif score < -0.05:
+            sentiment = "Negative"
+        else:
+            sentiment = "Neutral"
+
+        data.append({
+            "Country": row["Country"],
+            "Reviewer Name": row["Reviewer Name"],
+            "Rating": row["Rating"],
+            "Review Title": row["Review Title"],
+            "Sentiment": sentiment
+        })
+
+    return jsonify(data)
     app.run() 
